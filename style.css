@@ -2,52 +2,108 @@
   box-sizing: border-box;
 }
 
+:root {
+  --negro: #0a0a0a;
+  --negro-tarjeta: #131313;
+  --gris-borde: #262626;
+  --texto: #e6e6e6;
+  --texto-tenue: #8f8f8f;
+  --acento: #8a1f1f;
+}
+
 body {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  max-width: 700px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 2rem 1.2rem;
-  line-height: 1.6;
-  color: #222;
-  background: #fafafa;
+  padding: 2.5rem 1.2rem 4rem;
+  line-height: 1.65;
+  color: var(--texto);
+  background-color: var(--negro);
+  /* semitono fino: puntos pequeños repetidos, muy sutiles */
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 6px 6px;
 }
 
 header {
-  margin-bottom: 2.5rem;
-  border-bottom: 2px solid #222;
-  padding-bottom: 1rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--gris-borde);
+  padding-bottom: 1.2rem;
 }
 
 header h1 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 1.9rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--texto);
 }
 
 article {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  background: var(--negro-tarjeta);
+  border: 1px solid var(--gris-borde);
+  border-radius: 4px;
+  padding: 1.6rem 1.6rem 1.8rem;
+  margin-bottom: 2.2rem;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
 }
 
 article h2 {
   margin-top: 0;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
+  color: var(--texto);
+  border-left: 3px solid var(--acento);
+  padding-left: 0.7rem;
 }
 
 article time {
   display: block;
-  font-size: 0.85rem;
-  color: #777;
-  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: var(--texto-tenue);
+  margin: 0.3rem 0 1.2rem;
+  letter-spacing: 0.04em;
+}
+
+article p {
+  color: var(--texto);
+}
+
+article strong {
+  color: #ffffff;
 }
 
 article a {
-  color: #1a5fb4;
+  color: #c94b4b;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201,75,75,0.4);
+}
+
+article a:hover {
+  border-bottom-color: #c94b4b;
+}
+
+article img {
+  width: 100%;
+  display: block;
+  border-radius: 4px;
+  border: 1px solid var(--gris-borde);
+  margin: 1.2rem 0;
+}
+
+article .imgs {
+  display: flex;
+  gap: 0.8rem;
+  margin: 1.2rem 0;
+}
+
+article .imgs img {
+  margin: 0;
+  width: calc(50% - 0.4rem);
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 }
 
 #estado {
-  color: #777;
+  color: var(--texto-tenue);
   font-style: italic;
 }

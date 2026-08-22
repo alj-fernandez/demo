@@ -1,0 +1,31 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="500" fill="#0a0a0a"/>
+
+  <!-- circulo con estrella de cinco puntas -->
+  <g stroke="#3a1414" stroke-width="4" fill="none">
+    <circle cx="250" cy="250" r="170"/>
+    <path d="M 250 90 L 296 210 L 424 210 L 320 285 L 360 405 L 250 330 L 140 405 L 180 285 L 76 210 L 204 210 Z"/>
+  </g>
+
+  <!-- murcielago -->
+  <g stroke="#f2f2f2" stroke-width="7" fill="#111" stroke-linejoin="round">
+    <path d="M 250 200
+             C 235 180 210 175 195 185
+             C 150 165 90 170 60 210
+             C 100 205 130 215 150 235
+             C 120 240 90 260 70 290
+             C 110 275 140 270 165 275
+             C 175 290 190 300 210 300
+             L 215 320 L 230 300
+             L 250 320
+             L 270 300 L 285 320 L 290 300
+             C 310 300 325 290 335 275
+             C 360 270 390 275 430 290
+             C 410 260 380 240 350 235
+             C 370 215 400 205 440 210
+             C 410 170 350 165 305 185
+             C 290 175 265 180 250 200 Z"/>
+    <circle cx="230" cy="220" r="8" fill="#0a0a0a"/>
+    <circle cx="270" cy="220" r="8" fill="#0a0a0a"/>
+  </g>
+</svg>

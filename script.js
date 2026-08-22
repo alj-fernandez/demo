@@ -8,6 +8,8 @@ function markdownAHtml(md) {
     // negrita e cursiva
     .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
     .replace(/\*(.*?)\*/gim, "<em>$1</em>")
+    // imágenes ![alt](url) -- tiene que ir antes que los enlaces
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<img src="$2" alt="$1" loading="lazy">')
     // enlaces [texto](url)
     .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>')
     // listas simples ("- item")
@@ -23,6 +25,7 @@ function markdownAHtml(md) {
       const b = bloque.trim();
       if (!b) return "";
       if (b.startsWith("<h") || b.startsWith("<ul") || b.startsWith("<li")) return b;
+      if (/^(<img[^>]*>\s*)+$/.test(b)) return `<div class="imgs">${b}</div>`;
       return `<p>${b}</p>`;
     })
     .join("\n");
