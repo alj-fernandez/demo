@@ -1,7 +1,4 @@
----
-titulo: segunda nota
-fecha: 2026-08-15
----
+
 
 Esta es otra nota, solo para probar que el sistema lee varios archivos y los ordena.
 
