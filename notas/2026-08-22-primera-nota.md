@@ -1,5 +1,5 @@
 ---
-titulo: Primera nota de prueba
+titulo: primera nota de prueba
 fecha: 2026-08-22
 ---
 
