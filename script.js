@@ -60,6 +60,29 @@ function slugDesdeRuta(ruta) {
   return ruta.split("/").pop().replace(/\.md$/, "");
 }
 
+// Extrae solo las imágenes markdown del cuerpo y las devuelve como HTML,
+// agrupando las que están juntas (misma lógica que markdownAHtml)
+function extraerImagenesHtml(cuerpo) {
+  const bloques = cuerpo.split(/\n\s*\n/);
+  const htmlImagenes = [];
+
+  bloques.forEach(bloque => {
+    const b = bloque.trim();
+    const soloImagenes = b
+      .split("\n")
+      .every(linea => /^\s*(!\[[^\]]*\]\([^)]+\)\s*)+\s*$/.test(linea.trim()) || linea.trim() === "");
+    if (!soloImagenes || !/!\[[^\]]*\]\([^)]+\)/.test(b)) return;
+
+    const convertido = b.replace(
+      /!\[([^\]]*)\]\(([^)]+)\)/gim,
+      '<img src="$2" alt="$1" loading="lazy">'
+    );
+    htmlImagenes.push(`<div class="imgs">${convertido}</div>`);
+  });
+
+  return htmlImagenes.join("\n");
+}
+
 // Extrae un resumen en texto plano del cuerpo de la nota (sin imágenes, sin markdown)
 function generarResumen(cuerpo, maxCaracteres = 220) {
   const textoPlano = cuerpo
@@ -89,6 +112,13 @@ function renderLista(contenedor) {
       const time = document.createElement("time");
       time.textContent = nota.meta.fecha;
       art.appendChild(time);
+    }
+
+    const imagenesHtml = extraerImagenesHtml(nota.cuerpo);
+    if (imagenesHtml) {
+      const imgDiv = document.createElement("div");
+      imgDiv.innerHTML = imagenesHtml;
+      art.appendChild(imgDiv);
     }
 
     const resumen = document.createElement("p");
