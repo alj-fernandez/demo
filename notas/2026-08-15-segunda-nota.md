@@ -1,5 +1,5 @@
 ---
-titulo: Segunda nota
+titulo: segunda nota
 fecha: 2026-08-15
 ---
 
