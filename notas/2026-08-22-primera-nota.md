@@ -1,7 +1,4 @@
----
-titulo: primera nota de prueba
-fecha: 2026-08-22
----
+
 
 Esta es la primera nota del blog. Está escrita en **Markdown**, así que se pueden usar cosas como:
 
