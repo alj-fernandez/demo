@@ -1,0 +1,12 @@
+Esta carpeta necesita 3 fotos reales (formato .jpg) con estos nombres exactos:
+
+1. escenario.jpg   -> foto 16:9 (por ejemplo 960x540), para la primera nota.
+2. craneo.jpg      -> foto cuadrada (por ejemplo 500x500), para la segunda nota.
+3. escena.jpg      -> foto cuadrada (por ejemplo 500x500), para la segunda nota.
+
+Descarga las fotos que te gustaron desde las páginas de banco libre,
+guardalas con esos nombres, y subilas a esta carpeta en tu repositorio
+(arrastrando el archivo desde la web de GitHub, dentro de imagenes/).
+
+Una vez subidas, el blog las va a mostrar automáticamente: los .md
+ya están apuntando a estos nombres, no hace falta tocar nada más.
