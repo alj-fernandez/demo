@@ -54,6 +54,109 @@ function parseFrontMatter(texto) {
   return { meta, cuerpo };
 }
 
+// Genera un "slug" (identificador de URL) a partir de la ruta del archivo .md
+// Ej: "notas/2026-08-22-primera-nota.md" -> "2026-08-22-primera-nota"
+function slugDesdeRuta(ruta) {
+  return ruta.split("/").pop().replace(/\.md$/, "");
+}
+
+// Extrae un resumen en texto plano del cuerpo de la nota (sin imágenes, sin markdown)
+function generarResumen(cuerpo, maxCaracteres = 220) {
+  const textoPlano = cuerpo
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, "")   // saca imágenes
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // deja el texto de los links
+    .replace(/[#*_>-]/g, "")                 // saca símbolos de markdown
+    .replace(/\s+/g, " ")                    // colapsa espacios/saltos de línea
+    .trim();
+
+  if (textoPlano.length <= maxCaracteres) return textoPlano;
+  return textoPlano.slice(0, maxCaracteres).trim() + "…";
+}
+
+let TODAS_LAS_NOTAS = []; // se llena una sola vez al cargar
+
+function renderLista(contenedor) {
+  contenedor.innerHTML = "";
+
+  TODAS_LAS_NOTAS.forEach(nota => {
+    const art = document.createElement("article");
+
+    const h2 = document.createElement("h2");
+    h2.textContent = nota.meta.titulo || "Sin título";
+    art.appendChild(h2);
+
+    if (nota.meta.fecha) {
+      const time = document.createElement("time");
+      time.textContent = nota.meta.fecha;
+      art.appendChild(time);
+    }
+
+    const resumen = document.createElement("p");
+    resumen.className = "resumen";
+    resumen.textContent = generarResumen(nota.cuerpo);
+    art.appendChild(resumen);
+
+    const leerMas = document.createElement("a");
+    leerMas.className = "leer-mas";
+    leerMas.href = "#nota=" + nota.slug;
+    leerMas.textContent = "Leer más →";
+    art.appendChild(leerMas);
+
+    contenedor.appendChild(art);
+  });
+}
+
+function renderNota(contenedor, slug) {
+  const nota = TODAS_LAS_NOTAS.find(n => n.slug === slug);
+
+  if (!nota) {
+    contenedor.innerHTML = "<p id=\"estado\">No se encontró esa nota.</p>";
+    return;
+  }
+
+  contenedor.innerHTML = "";
+
+  const volver = document.createElement("a");
+  volver.className = "volver";
+  volver.href = "#";
+  volver.textContent = "← Volver";
+  contenedor.appendChild(volver);
+
+  const art = document.createElement("article");
+
+  const h2 = document.createElement("h2");
+  h2.textContent = nota.meta.titulo || "Sin título";
+  art.appendChild(h2);
+
+  if (nota.meta.fecha) {
+    const time = document.createElement("time");
+    time.textContent = nota.meta.fecha;
+    art.appendChild(time);
+  }
+
+  const cuerpoDiv = document.createElement("div");
+  cuerpoDiv.innerHTML = markdownAHtml(nota.cuerpo);
+  art.appendChild(cuerpoDiv);
+
+  contenedor.appendChild(art);
+
+  // sube el scroll al principio al abrir una nota
+  window.scrollTo(0, 0);
+}
+
+// Decide qué mostrar según el hash actual de la URL (#nota=slug o vacío)
+function enrutar() {
+  const contenedor = document.getElementById("notas");
+  const hash = window.location.hash; // ej: "#nota=2026-08-22-primera-nota"
+
+  if (hash.startsWith("#nota=")) {
+    const slug = decodeURIComponent(hash.replace("#nota=", ""));
+    renderNota(contenedor, slug);
+  } else {
+    renderLista(contenedor);
+  }
+}
+
 async function cargarNotas() {
   const contenedor = document.getElementById("notas");
   const estado = document.getElementById("estado");
@@ -68,34 +171,21 @@ async function cargarNotas() {
         const res = await fetch(ruta);
         if (!res.ok) throw new Error(`No se pudo leer ${ruta}`);
         const texto = await res.text();
-        return parseFrontMatter(texto);
+        const parseada = parseFrontMatter(texto);
+        return { ...parseada, slug: slugDesdeRuta(ruta) };
       })
     );
 
     // ordena por fecha descendente (si existe la metadata "fecha")
     notas.sort((a, b) => (b.meta.fecha || "").localeCompare(a.meta.fecha || ""));
 
+    TODAS_LAS_NOTAS = notas;
+
     estado.remove();
+    enrutar();
 
-    notas.forEach(nota => {
-      const art = document.createElement("article");
-
-      const h2 = document.createElement("h2");
-      h2.textContent = nota.meta.titulo || "Sin título";
-      art.appendChild(h2);
-
-      if (nota.meta.fecha) {
-        const time = document.createElement("time");
-        time.textContent = nota.meta.fecha;
-        art.appendChild(time);
-      }
-
-      const cuerpoDiv = document.createElement("div");
-      cuerpoDiv.innerHTML = markdownAHtml(nota.cuerpo);
-      art.appendChild(cuerpoDiv);
-
-      contenedor.appendChild(art);
-    });
+    // cada vez que cambia el hash (clic en "Leer más" o "Volver"), re-renderiza
+    window.addEventListener("hashchange", enrutar);
   } catch (err) {
     estado.textContent = "Error al cargar las notas: " + err.message;
     console.error(err);

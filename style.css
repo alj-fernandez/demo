@@ -72,6 +72,35 @@ article p {
   margin: 0.9rem 0;
 }
 
+article .resumen {
+  color: var(--texto-tenue);
+}
+
+a.leer-mas {
+  display: inline-block;
+  margin-top: 0.4rem;
+  color: #c94b4b;
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+a.leer-mas:hover {
+  text-decoration: underline;
+}
+
+a.volver {
+  display: inline-block;
+  margin-bottom: 1.2rem;
+  color: var(--texto-tenue);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+a.volver:hover {
+  color: var(--texto);
+}
+
 article strong {
   color: #ffffff;
 }
